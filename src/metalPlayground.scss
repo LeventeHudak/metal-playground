@@ -1,0 +1,123 @@
+body.open {
+  padding-left: 320px;
+  overflow: hidden;
+}
+
+html, body {
+    height: 95%;
+}
+
+.metal-playground {
+  $mainColor: #00ECB9;
+
+  height: 100%;
+
+  a.control-menu-icon {
+    text-decoration: none;
+  }
+
+  .blockquote-main {
+    border-color: $mainColor;
+  }
+
+  .blockquote-sm > a:hover {
+    color: $mainColor;
+  }
+
+  .container-fluid, .col-md-4, .col-md-8 {
+    height: 100%;
+  }
+
+  .navbar {
+    .navbar-nav > li > a:hover {
+      color: $mainColor;
+    }
+
+    background-color: #1F282E;
+    margin-bottom: 14px;
+  }
+
+  .metal-playground-editor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 15px;
+    height: 100%;
+    width: 95%;
+  }
+
+  .metal-playground-live-view {
+    border-color: $mainColor;
+    border-style: dashed;
+    border-width: 2px;
+    padding: 20px;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+
+    $checkerColor: #F3FFFC;
+
+    background-color: white;
+    background-image: -webkit-linear-gradient(bottom left, $checkerColor  25%, transparent 25%, transparent 75%, $checkerColor  75%, $checkerColor ), -webkit-linear-gradient(bottom left, $checkerColor  25%, transparent 25%, transparent 75%, $checkerColor  75%, $checkerColor );
+    background-image: -o-linear-gradient(bottom left, $checkerColor  25%, transparent 25%, transparent 75%, $checkerColor  75%, $checkerColor ), -o-linear-gradient(bottom left, $checkerColor  25%, transparent 25%, transparent 75%, $checkerColor  75%, $checkerColor );
+    background-image: linear-gradient(to top right, $checkerColor  25%, transparent 25%, transparent 75%, $checkerColor  75%, $checkerColor ), linear-gradient(to top right, $checkerColor  25%, transparent 25%, transparent 75%, $checkerColor  75%, $checkerColor );
+    background-size:100px 100px;
+    background-position: 0 0, 50px 50px;
+
+      .metal-playground-rendered-component {
+        color: #869CAD;
+        margin-left: auto;
+        margin-right: auto;
+      }
+  }
+
+  .metal-playground-state-list {
+    list-style: none;
+  }
+
+  .text-main {
+    color: $mainColor;
+  }
+
+  $width: 15px;
+  $height: 15px;
+  $bounce_height: 30px;
+
+  .bounceball {
+    position: relative;
+    display: inline-block;
+    height: 20px;
+    width: $width;
+
+    &:before {
+      position: absolute;
+      content: '';
+      display: block;
+      top: 0;
+      width: $width;
+      height: $height;
+      border-radius: 50%;
+      background-color: $mainColor;
+      transform-origin: 50%;
+      animation: metal-playground-bounce 500ms alternate infinite ease;
+    }
+  }
+
+  @keyframes metal-playground-bounce {
+    0% {
+      top: $bounce_height;
+      height: 5px;
+      border-radius: 60px 60px 20px 20px;
+      transform: scaleX(2);
+    }
+    35% {
+      height: $width;
+      border-radius: 50%;
+      transform: scaleX(1);
+    }
+    100% {
+      top: 0;
+    }
+  }
+}
