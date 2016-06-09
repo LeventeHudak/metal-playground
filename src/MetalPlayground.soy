@@ -1,0 +1,136 @@
+{namespace MetalPlayground}
+
+/**
+ * This renders the component's whole content.
+ * @param componentList
+ * @param currentComponent
+ * @param isPlaying
+ * @param onComponentClickHandler
+ * @param onComponentStateClickHandler
+ * @param onPlayingClickHandler
+ * @param onSaveCurrentStateClickHandler
+ */
+{template .render}
+	<div class="metal-playground">
+		{call .renderNavigation}
+			{param currentComponent: $currentComponent /}
+			{param isPlaying: $isPlaying /}
+			{param onPlayingClickHandler: $onPlayingClickHandler /}
+			{param onSaveCurrentStateClickHandler: $onSaveCurrentStateClickHandler /}
+		{/call}
+		{call .renderColumns /}
+		{call .renderSidenav}
+			{param componentList: $componentList /}
+			{param onComponentClickHandler: $onComponentClickHandler /}
+			{param onComponentStateClickHandler: $onComponentStateClickHandler /}
+		{/call}
+	</div>
+{/template}
+
+/**
+ * This renders the components navigation.
+ * @param currentComponent
+ * @param isPlaying
+ * @param onPlayingClickHandler
+ * @param onSaveCurrentStateClickHandler
+ */
+{template .renderNavigation}
+	<nav class="collapse-basic-search navbar navbar-default navbar-no-collapse">
+		<ul class="nav navbar-nav">
+				<li>
+					<a class="control-menu-icon" data-content="body" data-toggle="sidenav" data-type="fixed-push" href="#metalSidenav">
+						<span class="icon-align-justify metal-playground-component-selector"></span>
+					</a>
+				</li>
+				<li class="active"><a href="#">Metal Playground</a></li>
+				<li>
+					<a class="control-menu-icon" data-onclick="{$onPlayingClickHandler}" href="#">
+						<span class="{$isPlaying ? 'icon-stop' : 'icon-play'} metal-playground-play-stop"></span>
+					</a>
+				</li>
+				{if $isPlaying}
+					<li>
+						<a class="control-menu-icon">
+							<div class="bounceball metal-playground-loading-indicator"></div>
+						</a>
+					</li>
+				{/if}
+				<li>
+					<a class="control-menu-icon" href="index.html">
+						<span class="icon-refresh metal-playground-reset"></span>
+					</a>
+				</li>
+				{if $currentComponent != null}
+					<li>
+						<a class="control-menu-icon" data-onclick="{$onSaveCurrentStateClickHandler}" href="#">
+							<span class="icon-save metal-playground-save-current-state"></span>
+						</a>
+					</li>
+				{/if}
+				<li>
+					<a class="control-menu-icon">
+						<span class="text-main">Component state changes will get propageted to the editor, unless you press the STOP button.</span>
+					</a>
+				</li>
+		</ul>
+	</nav>
+{/template}
+
+/**
+ * This renders the component's side-navigation content.
+ * @param componentList
+ * @param onComponentClickHandler
+ * @param onComponentStateClickHandler
+ */
+{template .renderSidenav}
+	<div class="sidenav-fixed sidenav-menu-slider closed" id="metalSidenav">
+		<div class="sidebar sidebar-inverse sidenav-menu">
+			<div class="sidebar-header">
+				<h4>
+					Available components
+				</h4>
+			</div>
+
+			<div class="sidebar-body">
+				<div class="row row-spacing">
+					<div class="col-md-12">
+						{foreach $current_component in $componentList}
+							<div>
+								<blockquote class="blockquote-sm blockquote-primary">
+									<a class="control-menu-icon" href="#" data-onclick="{$onComponentClickHandler}" data-componentindex="{index($current_component)}">{$current_component.NAME}</a>
+								</blockquote>
+
+								{if $current_component.savedStates != null}
+									<ul class="metal-playground-state-list">
+										{foreach $stateName in $current_component.savedStateNames}
+											<li>
+												<blockquote class="blockquote-sm blockquote-main">
+													<a class="control-menu-icon" href="#" data-onclick="{$onComponentStateClickHandler}" data-componentindex="{index($current_component)}" data-stateindex="{index($stateName)}">{$stateName}</a>
+												</blockquote>
+											</li>
+										{/foreach}
+									</ul>
+								{/if}
+							</div>
+						{/foreach}
+				</div>
+			</div>
+
+			<div class="sidebar-footer"></div>
+		</div>
+	</div>
+</div>
+{/template}
+
+{template .renderColumns}
+	<div class="container-fluid">
+		<div class="col-md-4">
+			<div class="metal-playground-editor"></div>
+		</div>
+		<div class="col-md-8">
+			<div class="flex-container metal-playground-live-view">
+				<div class="metal-playground-rendered-component">component will be displayed here...</div>
+			</div>
+		</div>
+	</div>
+{/template}
