@@ -1,0 +1,196 @@
+{namespace MetalPlayground}
+
+/**
+ * This renders the component's whole content.
+ * @param componentList
+ * @param currentComponent
+ * @param isPlaying
+ * @param onComponentClickHandler_
+ * @param onComponentStateClickHandler_
+ * @param onPlayingClickHandler_
+ * @param onSaveCurrentStateClickHandler_
+ */
+{template .render}
+	<div class="metal-playground">
+		{call .renderNavigation}
+			{param currentComponent: $currentComponent /}
+			{param isPlaying: $isPlaying /}
+			{param onPlayingClickHandler_: $onPlayingClickHandler_ /}
+			{param onSaveCurrentStateClickHandler_: $onSaveCurrentStateClickHandler_ /}
+		{/call}
+
+		{call .renderColumns /}
+
+		{call .renderSidenav}
+			{param componentList: $componentList /}
+			{param onComponentClickHandler_: $onComponentClickHandler_ /}
+			{param onComponentStateClickHandler_: $onComponentStateClickHandler_ /}
+		{/call}
+
+		{call .renderTooltips /}
+	</div>
+{/template}
+
+/**
+ * This renders the main content of the application.
+ */
+{template .renderColumns}
+	<div class="container-fluid">
+		<div class="col-md-4">
+			<div class="metal-playground-editor"></div>
+		</div>
+		<div class="col-md-8">
+			<div class="flex-container metal-playground-live-view">
+				<div class="metal-playground-rendered-component">component will be displayed here...</div>
+			</div>
+		</div>
+	</div>
+{/template}
+
+/**
+ * This renders the components navigation.
+ * @param currentComponent
+ * @param isPlaying
+ * @param onPlayingClickHandler_
+ * @param onSaveCurrentStateClickHandler_
+ */
+{template .renderNavigation}
+	<nav class="collapse-basic-search navbar navbar-default navbar-no-collapse">
+		<ul class="nav navbar-nav">
+				<li>
+					<a class="control-menu-icon" data-content="body" data-toggle="sidenav" data-type="fixed-push" href="#metalSidenav">
+						<span class="icon-align-justify metal-playground-component-selector"></span>
+					</a>
+				</li>
+				<li class="active"><a href="#">Metal Playground</a></li>
+				<li>
+					<a class="control-menu-icon" data-onclick="{$onPlayingClickHandler_}" href="#">
+						<span class="{$isPlaying ? 'icon-stop' : 'icon-play'} metal-playground-play-stop"></span>
+					</a>
+				</li>
+				{if $isPlaying}
+					<li>
+						<a class="control-menu-icon">
+							<div class="bounceball metal-playground-loading-indicator"></div>
+						</a>
+					</li>
+				{/if}
+				<li>
+					<a class="control-menu-icon" href="index.html">
+						<span class="icon-refresh metal-playground-reset"></span>
+					</a>
+				</li>
+				{if $currentComponent != null}
+					<li>
+						<a class="control-menu-icon" data-onclick="{$onSaveCurrentStateClickHandler_}" href="#">
+							<span class="icon-save metal-playground-save-current-state"></span>
+						</a>
+					</li>
+				{/if}
+				<li>
+					<a class="control-menu-icon">
+						<span class="text-main">Component state changes will get propageted to the editor, unless you press the STOP button.</span>
+					</a>
+				</li>
+		</ul>
+	</nav>
+{/template}
+
+/**
+ * This renders the component's side-navigation content.
+ * @param componentList
+ * @param onComponentClickHandler_
+ * @param onComponentStateClickHandler_
+ */
+{template .renderSidenav}
+	<div class="sidenav-fixed sidenav-menu-slider closed" id="metalSidenav">
+		<div class="sidebar sidebar-inverse sidenav-menu">
+			<div class="sidebar-header">
+				<h4>
+					Available components
+				</h4>
+			</div>
+
+			<div class="sidebar-body">
+				<div class="row row-spacing">
+					<div class="col-md-12">
+						{foreach $current_component in $componentList}
+							<div>
+								<blockquote class="blockquote-sm blockquote-primary">
+									<a class="control-menu-icon" href="#" data-onclick="{$onComponentClickHandler_}" data-componentindex="{index($current_component)}">{$current_component.NAME}</a>
+								</blockquote>
+
+								{if $current_component.savedStates != null}
+									<ul class="metal-playground-state-list">
+										{foreach $stateName in $current_component.savedStateNames}
+											<li>
+												<blockquote class="blockquote-sm blockquote-main">
+													<a class="control-menu-icon" href="#" data-onclick="{$onComponentStateClickHandler_}" data-componentindex="{index($current_component)}" data-stateindex="{index($stateName)}">{$stateName}</a>
+												</blockquote>
+											</li>
+										{/foreach}
+									</ul>
+								{/if}
+							</div>
+						{/foreach}
+				</div>
+			</div>
+
+			<div class="sidebar-footer"></div>
+		</div>
+	</div>
+</div>
+{/template}
+
+/**
+ * This renders the tooltips.
+ */
+{template .renderTooltips}
+	{let $resetTitleHtml kind="html"}
+		Resets the application
+	{/let}
+
+	{call Tooltip.render}
+		{param delay: [300, 150] /}
+		{param elementClasses: 'fade' /}
+		{param selector: '.metal-playground-reset' /}
+		{param title: $resetTitleHtml /}
+		{param visible: false /}
+	{/call}
+
+	{let $liveReloadingTitleHtml kind="html"}
+		Toggles the live reloading of the editor if the components state changes
+	{/let}
+
+	{call Tooltip.render}
+		{param delay: [300, 150] /}
+		{param elementClasses: 'fade' /}
+		{param selector: '.metal-playground-play-stop' /}
+		{param title: $liveReloadingTitleHtml /}
+		{param visible: false /}
+	{/call}
+
+	{let $openComponentSelectorTitleHtml kind="html"}
+		Opens the component selector
+	{/let}
+
+	{call Tooltip.render}
+		{param delay: [300, 150] /}
+		{param elementClasses: 'fade' /}
+		{param selector: '.metal-playground-component-selector' /}
+		{param title: $openComponentSelectorTitleHtml /}
+		{param visible: false /}
+	{/call}
+
+	{let $saveStateTitleHtml kind="html"}
+		Saves the current state with the given name
+	{/let}
+
+	{call Tooltip.render}
+		{param delay: [300, 150] /}
+		{param elementClasses: 'fade' /}
+		{param selector: '.metal-playground-save-current-state' /}
+		{param title: $saveStateTitleHtml /}
+		{param visible: false /}
+	{/call}
+{/template}

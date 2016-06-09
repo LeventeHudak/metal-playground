@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Demo: MetalPlayground</title>
+
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	  <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="http://liferay.github.io/lexicon/js/side-navigation.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://liferay.github.io/lexicon/css/atlas-font-awesome.css">
+		<script type="text/javascript" src="../node_modules/ace-editor-builds/src-min-noconflict/ace.js"></script>
+
+		<link rel="stylesheet" href="../build/metalPlayground.css">
+
+		<script src="../build/globals/metalPlayground.js"></script>
+	</head>
+
+	<body>
+		<div id="content"></div>
+
+    <script type="text/javascript">
+			var playground = new metal.MetalPlayground({
+				element: '#content'
+			});
+    </script>
+	</body>
+</html>
